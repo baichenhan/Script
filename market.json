@@ -2401,91 +2401,63 @@
     {
       "title": "灵魂面甲（Soulmask）服务器",
       "language": "zh_cn",
-      "platform": "Linux",
-      "description": "适用于 Linux，统一使用 githubyumao/steam-game-runtime 通用镜像；请在面板中先点击「更新」执行 SteamCMD 将专用服务端安装到容器内 /data（AppID 3017300），完成后再「启动」。启动命令默认为 PVE，可将 -pve 改为 -pvp，并务必修改游戏密码、管理员密码与 RCON 密码。需要节点已安装 Docker；执行 steamcmd 请勿使用 root 用户（模板已指定 runAs steam）。",
+      "platform": "Windows",
+      "description": "适用于 Windows：使用 SteamCMD 安装《灵魂面甲》官方 Windows 专用服（AppID 3017310），在面板工作目录执行「更新」后再「启动」。默认 PVE，可将命令行中的 -pve 改为 -pvp；请修改 -SteamServerName、-PSW、-adminpsw 与 RCON 相关参数。游戏与查询端口默认 8777 / 27015（EchoPort 18888），若修改请同步防火墙与路由器转发。",
       "image": "https://cdn.akamai.steamstatic.com/steam/apps/2646460/header.jpg",
       "gameType": "Soulmask",
       "category": "最新版本",
-      "runtime": "Ubuntu/Centos LTS",
-      "hardware": "RAM 8G+",
+      "runtime": "Windows Server / Windows 10+",
+      "hardware": "RAM 16G+",
       "size": "",
-      "targetLink": "",
       "author": "MCSManager",
       "tags": [
-        "Docker 版",
-        "Steam"
+        "Steam",
+        "不完全兼容面板"
       ],
+      "remark": "需安装 Visual C++ 运行库；若 Steam 联机相关报错，可将安装根目录下 steamclient64.dll、tier0_s64.dll、vstdlib_s64.dll 复制到 WS\\Binaries\\Win64 后再启动（见社区专服指南）。",
+      "targetLink": "https://mcsmanager.oss-cn-guangzhou.aliyuncs.com/steamcmd.exe",
       "setupInfo": {
-        "startCommand": "./WSServer.sh Level01_Main -server -SILENT -SteamServerName=SoulmaskServer -pve -MaxPlayers=50 -backup=900 -saving=600 -log -UTF8Output -MULTIHOME=0.0.0.0 -Port=27050 -QueryPort=27051 -online=Steam -forcepassthrough -PSW=ChangeMe -adminpsw=AdminChangeMe -rconaddr=0.0.0.0 -rconpsw=RconChangeMe -rconport=19000",
-        "stopCommand": "^C",
-        "updateCommand": "/home/steam/steamcmd/steamcmd.sh -net_ipv4 +force_install_dir \"/data\" +login anonymous \"+app_update 3017300 validate\" +quit",
-        "ie": "utf8",
-        "oe": "utf8",
         "type": "steam/universal",
+        "startCommand": "\"WS/Binaries/Win64/WSServer-Win64-Shipping.exe\" Level01_Main -server -SILENT -log -UTF8Output -PORT=8777 -QueryPort=27015 -EchoPort=18888 -online=Steam -forcepassthrough -SteamServerName=SoulmaskServer -pve -MaxPlayers=50 -backup=900 -saving=600 -PSW=ChangeMe -adminpsw=AdminChangeMe -rconaddr=0.0.0.0 -rconpsw=RconChangeMe -rconport=19000",
+        "stopCommand": "^C",
+        "updateCommand": "steamcmd.exe +login anonymous +force_install_dir \"{mcsm_workspace}\" +app_update 3017310 validate +quit",
+        "ie": "utf-8",
+        "oe": "utf-8",
         "tag": [
           "Soulmask"
         ],
-        "fileCode": "utf8",
-        "processType": "docker",
-        "runAs": "steam",
-        "docker": {
-          "image": "githubyumao/steam-game-runtime:latest",
-          "updateCommandImage": "githubyumao/steam-game-runtime:latest",
-          "ports": [
-            "{mcsm_port1}:27050/udp",
-            "{mcsm_port2}:27051/udp",
-            "{mcsm_port3}:19000/tcp"
-          ],
-          "changeWorkdir": true,
-          "workingDir": "/data",
-          "env": [],
-          "extraVolumes": []
-        }
+        "fileCode": "utf8"
       }
     },
     {
       "title": "Soulmask Dedicated Server",
       "language": "en_us",
-      "platform": "Linux",
-      "description": "Linux template using githubyumao/steam-game-runtime:latest. In the panel, run Update first to execute SteamCMD and install the dedicated server into /data (AppID 3017300), then Start. Default start command is PVE; change -pve to -pvp and replace gameplay, admin, and RCON passwords. Docker required on the node; steamcmd must not run as root (runAs is steam per image docs).",
+      "platform": "Windows",
+      "description": "Windows dedicated server for Soulmask: install with SteamCMD (AppID 3017310) into the panel workspace, run Update then Start. Default is PVE (-pve); use -pvp for PVP. Change -SteamServerName, -PSW, -adminpsw, and RCON options. Default game/query ports are 8777 / 27015 (EchoPort 18888); open them in the firewall if you change them.",
       "image": "https://cdn.akamai.steamstatic.com/steam/apps/2646460/header.jpg",
       "gameType": "Soulmask",
       "category": "Latest Version",
-      "runtime": "Ubuntu/Centos LTS",
-      "hardware": "RAM 8G+",
+      "runtime": "Windows Server / Windows 10+",
+      "hardware": "RAM 16G+",
       "size": "",
-      "targetLink": "",
       "author": "MCSManager",
       "tags": [
-        "Docker version",
-        "Steam"
+        "Steam",
+        "Incompatible with panel"
       ],
+      "remark": "Install Visual C++ runtimes. If Steam online init fails, copy steamclient64.dll, tier0_s64.dll, and vstdlib_s64.dll from the install root into WS\\Binaries\\Win64 (see community dedicated server guides).",
+      "targetLink": "https://mcsmanager.oss-cn-guangzhou.aliyuncs.com/steamcmd.exe",
       "setupInfo": {
-        "startCommand": "./WSServer.sh Level01_Main -server -SILENT -SteamServerName=SoulmaskServer -pve -MaxPlayers=50 -backup=900 -saving=600 -log -UTF8Output -MULTIHOME=0.0.0.0 -Port=27050 -QueryPort=27051 -online=Steam -forcepassthrough -PSW=ChangeMe -adminpsw=AdminChangeMe -rconaddr=0.0.0.0 -rconpsw=RconChangeMe -rconport=19000",
-        "stopCommand": "^C",
-        "updateCommand": "/home/steam/steamcmd/steamcmd.sh -net_ipv4 +force_install_dir \"/data\" +login anonymous \"+app_update 3017300 validate\" +quit",
-        "ie": "utf8",
-        "oe": "utf8",
         "type": "steam/universal",
+        "startCommand": "\"WS/Binaries/Win64/WSServer-Win64-Shipping.exe\" Level01_Main -server -SILENT -log -UTF8Output -PORT=8777 -QueryPort=27015 -EchoPort=18888 -online=Steam -forcepassthrough -SteamServerName=SoulmaskServer -pve -MaxPlayers=50 -backup=900 -saving=600 -PSW=ChangeMe -adminpsw=AdminChangeMe -rconaddr=0.0.0.0 -rconpsw=RconChangeMe -rconport=19000",
+        "stopCommand": "^C",
+        "updateCommand": "steamcmd.exe +login anonymous +force_install_dir \"{mcsm_workspace}\" +app_update 3017310 validate +quit",
+        "ie": "utf-8",
+        "oe": "utf-8",
         "tag": [
           "Soulmask"
         ],
-        "fileCode": "utf8",
-        "processType": "docker",
-        "runAs": "steam",
-        "docker": {
-          "image": "githubyumao/steam-game-runtime:latest",
-          "updateCommandImage": "githubyumao/steam-game-runtime:latest",
-          "ports": [
-            "{mcsm_port1}:27050/udp",
-            "{mcsm_port2}:27051/udp",
-            "{mcsm_port3}:19000/tcp"
-          ],
-          "changeWorkdir": true,
-          "workingDir": "/data",
-          "env": [],
-          "extraVolumes": []
-        }
+        "fileCode": "utf8"
       }
     }
   ]
